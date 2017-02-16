@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="LayoutPadrao">
+	<head>
+		<title>Cadastro de Produtos</title>
+	</head>
+		
+<section layout:fragment="conteudo">
+	<form class="form-horizontal" method="POST" th:action="@{/produtos}" th:object="${produto}">
+		
+		<div layout:include="MensagemGeral"></div>
+		<div layout:include="MensagemErro"></div>
+		
+    	<div class="panel panel-default">
+    		<div class="panel-heading">
+    			<div class="clearfix">
+    				<h1 class="panel-title rd-titulo-panel">Cadastro de Produtos</h1>
+    				<a class="btn btm-link rd-link-panel" th:href="@{/produtos}">Pesquisar Produtos</a>
+   				</div>
+    		</div>
+    		
+    		<div class="panel-body">
+    			<input type="hidden" th:field="*{id}" />
+    		
+    			<div class="form-group" th:classappend="${#fields.hasErrors('codigo')} ? has-error">
+					<label for="codigo" class="col-sm-2 control-label">Código</label>
+					<div class="col-sm-2"> 
+						<input type="text" class="form-control" id="codigo" th:field="*{codigo}"/>
+					</div>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('nome')} ? has-error">
+					<label for="nome" class="col-sm-2 control-label">Nome</label>
+					<div class="col-sm-4"> 
+						<input type="text" class="form-control" id="nome" th:field="*{nome}"/>
+					</div>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('descricao')} ? has-error">
+					<label for="descricao" class="col-sm-2 control-label">Descrição</label>
+					<div class="col-sm-8"> 
+						<input type="text" class="form-control" id="descricao" th:field="*{descricao}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="madeira" class="col-sm-2 control-label">Madeira</label>
+					<div class="col-sm-2">
+						<select class="form-control" th:field="*{madeira}">
+							<option th:each="optionMadeira : ${tiposMadeira}" th:value="${optionMadeira}" th:text="${optionMadeira.descricao}"></option>
+                    	</select>
+                    </div>
+				</div>
+				<div class="form-group" th:classappend="${#fields.hasErrors('valor')} ? has-error">
+					<label for="valor" class="col-sm-2 control-label">Valor</label>
+					<div class="col-sm-2">   
+						<input type="text" class="form-control js-currency" id="valor" th:field="*{valor}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="status" class="col-sm-2 control-label">Status</label>
+					<div class="col-sm-2">
+						<select class="form-control" th:field="*{status}">
+							<option th:each="optionStatus : ${tipoStatus}" th:value="${optionStatus}" th:text="${optionStatus.descricao}"></option>
+                    	</select>
+                    </div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary">Salvar</button>
+					</div>
+				</div>
+			</div>
+    	</div>
+	</form>
+</section>
+	
+</html>

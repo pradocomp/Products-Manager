@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="LayoutPadrao">
+	  
+	<head>
+		<title>Pesquisa de Produtos</title>
+	</head>
+	
+<section layout:fragment="conteudo">
+
+	<div layout:include="MensagemGeral"></div>
+
+   	<div class="panel panel-default">
+   		<div class="panel-heading">
+   			<div class="clearfix">
+   				<h1 class="panel-title rd-titulo-panel">Pesquisa de Produtos</h1>
+   				<a class="btn btm-link rd-link-panel" th:href="@{/produtos/novo}">Novo Produto</a>
+   			</div>
+   		</div>
+   		
+   		<div class="panel-body">
+			<form class="form-horizontal" method="GET" th:action="@{/produtos}" th:object="${filtro}">
+				<div class="form-group">
+					<div class="col-sm-4">
+						<div class="input-group">
+							<input class="form-control" placeholder="Digite aqui sua pesquisa por código" 
+								autofocus="autofocus" th:field="*{codigo}" />
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-default">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>							
+							</span>
+						</div>
+					</div>
+				</div>
+			</form>   		
+   		
+   			<table class="table table-bordered table-striped">
+   				<thead>
+   					<tr>
+   						<th class="text-center col-md-1">#</th>
+   						<th class="text-center col-md-1">Cód</th>
+   						<th class="text-left col-md-2">Nome</th>
+   						<th class="text-left col-md-4">Descrição</th>
+   						<th class="text-center col-md-1">Madeira</th>
+   						<th class="text-right col-md-1">Valor</th>
+   						<th class="text-center col-md-1">Status</th>
+   						<th class="col-md-1">Ação</th>
+   					</tr>
+   				</thead>
+   				<tbody>
+   					<tr th:each="produto: ${produtos}">
+   						<td class="text-center" th:text="${produto.id}"></td>
+   						<td class="text-center" th:text="${produto.codigo}"></td>
+   						<td th:text="${produto.nome}"></td>
+   						<td class="text-center" th:text="${produto.descricao}"></td>
+   						<td class="text-center" th:text="${produto.madeira.descricao}"></td>
+   						<td class="text-right" th:text="|R$ ${{produto.valor}}|"></td>
+   						<td class="text-center" th:attr="data-role=${produto.id}">
+   							<span class="label" th:text="${produto.status.descricao}"
+   								th:classappend="${produto.disponivel ? 'label-primary' : 'label-success'}">
+   							</span>
+   						</td>
+   						<td> 
+   							<span>
+	   							<a class="btn btn-link btn-xs" th:href="@{/produtos/{id}(id=${produto.id})}"
+	   								title="Editar" rel="tooltip" data-placement="top">
+	   								<span class="glyphicon glyphicon-pencil"></span>
+	   							</a>
+   							    <a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+   							    	th:attr="data-id=${produto.id}, data-codigo=${produto.codigo}"
+   							    	title="Excluir" rel="tooltip" data-placement="top">
+   									<span class="glyphicon glyphicon-remove"></span>
+   								</a>
+   								<a class="btn btn-link btn-xs js-atualizar-status" th:if="${produto.disponivel}"
+   									th:href="@{/produtos/{id}/atualizar(id=${produto.id})}"
+   									title="Checar Venda" rel="tooltip" data-placement="top"
+   									th:attr="data-id=${produto.id}">
+	   								<span class="glyphicon glyphicon-check"></span>
+	   							</a>
+   							</span>
+   						</td>
+   					</tr>
+    				<tr>
+    					<td colspan="6" th:if="${#lists.isEmpty(produtos)}">Nenhum produto foi encontrado</td>
+    				</tr>
+   				</tbody>
+   			</table>
+		</div>
+		
+		<div layout:include="ModalExclusao"></div>
+		
+   	</div>
+</section>
+</html>
